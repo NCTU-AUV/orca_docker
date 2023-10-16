@@ -1,0 +1,36 @@
+#!/bin/bash
+
+NC='\033[0m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+
+set -x
+
+# require DEMO_WS to be set
+if [ -z "${DEMO_WS}" ]; then
+    echo -e "${RED}FAILED: environment variable DEMO_WS not set${NC}"
+    exit 1
+fi
+
+# start the ros2 container if it is not running
+if ! docker start ros2; then
+    docker run \
+        -v "${DEMO_WS}":/demo_ws \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY \
+        --name ros2 \
+        -it -d orca_ros2:latest
+fi
+
+# check if arguments are provided
+if [ -z "$1" ]; then
+    echo -e "${YELLOW}WARNING: no arguments provided${NC}"
+fi
+
+# run docker exec
+if docker exec -it ros2 /ros_entrypoint.sh "$@"; then
+    echo -e "${GREEN}SUCCESS${NC}"
+else
+    echo -e "${RED}FAILED: exit code $?${NC}"
+fi
