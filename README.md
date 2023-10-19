@@ -44,7 +44,11 @@ Environments:
 
 ### Setup
 
-1. 建立一個 ROS workspace
+1. clone repository
+   ```sh
+   git clone git@github.com:NCTU-AUV/orca_docker.git
+   ```
+2. 建立一個 ROS workspace
     ```sh
     mkdir -p /path/to/your/workspace/src
     ```
@@ -52,7 +56,7 @@ Environments:
     ```sh
     mkdir -p ~/demo_ws/src
     ```
-2. 將下面兩行加入 `~/.bashrc`
+3. 將下面兩行加入 `~/.bashrc`
     ```sh
     export PATH=$PATH:/path/to/this/repo/scripts
     export DEMO_WS=/path/to/your/workspace
@@ -62,12 +66,13 @@ Environments:
     export PATH=$PATH:$HOME/orca_docker/scripts
     export DEMO_WS=$HOME/demo_ws
     ```
-3. 重新 source `~/.bashrc`
+4. 重新 source `~/.bashrc`
     ```sh
     source ~/.bashrc
     ```
-4. Build docker image
+5. Build docker image
    ```
+   cd /path/to/this/repo
    docker build -f Dockerfile -t orca_ros2 .
    ```
 
@@ -82,5 +87,5 @@ Environments:
     # 執行 bash
     up bash
     # 執行 turtlesim
-    up ros2 turtlesim turtlesim_node
+    up ros2 run turtlesim turtlesim_node
     ```
