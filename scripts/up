@@ -7,30 +7,41 @@ YELLOW='\033[0;33m'
 
 set -x
 
-# require DEMO_WS to be set
-if [ -z "${DEMO_WS}" ]; then
-    echo -e "${RED}FAILED: environment variable DEMO_WS not set${NC}"
+IMAGE_NAME=orca_ros2
+CONTAINER_NAME=orca_ros2
+WORKDIR=/workspaces/ros2_ws
+
+cd "$(dirname "$0")/.." || exit 1
+
+# require ROS2_WS to be set
+if [ -z "${ROS2_WS}" ]; then
+    echo -e "${RED}FAILED: environment variable ROS2_WS not set${NC}"
     exit 1
 fi
 
-# start the ros2 container if it is not running
-if ! docker start ros2; then
-    docker run \
-        -v "${DEMO_WS}":/demo_ws \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e DISPLAY \
-        --name ros2 \
-        -it -d orca_ros2:latest
-fi
+# attach to running container
+if [ "$(docker container inspect -f '{{.State.Status}}' $CONTAINER_NAME)" = "running" ]; then
+    # check if arguments are provided
+    if [ -z "$1" ]; then
+        echo -e "${YELLOW}WARNING: no arguments provided${NC}"
+    fi
 
-# check if arguments are provided
-if [ -z "$1" ]; then
-    echo -e "${YELLOW}WARNING: no arguments provided${NC}"
-fi
-
-# run docker exec
-if docker exec -it ros2 /ros_entrypoint.sh "$@"; then
-    echo -e "${GREEN}SUCCESS${NC}"
+    # run docker exec
+    docker exec -it $CONTAINER_NAME /ros_entrypoint.sh "$@"
+# no orca_ros2 container is running
 else
-    echo -e "${RED}FAILED: exit code $?${NC}"
+    # rebuild the image
+    if ! docker build -f Dockerfile -t "${IMAGE_NAME}" "${ROS2_WS}"; then
+        echo -e "${RED}FAILED: failed to build ${IMAGE_NAME}${NC}"
+    # start the container
+    else
+        docker run \
+            -v "${ROS2_WS}:${WORKDIR}" \
+            -v /tmp/.X11-unix:/tmp/.X11-unix \
+            -e DISPLAY \
+            --name $CONTAINER_NAME \
+            -it \
+            --rm \
+            "${IMAGE_NAME}:latest" /bin/bash
+    fi
 fi
