@@ -1,4 +1,4 @@
-# ROS2 tutorial
+# Orca AUV ROS2 environment
 
 ## Prerequisites
 
@@ -7,85 +7,23 @@
 
 ## Install
 
-Environments:
-- [wsl2](#wsl)
-- [ubuntu / VM](#virtual-machine)
-- [MacOS](#macos)
+1. Download the repository
 
-### WSL
-
-
-1. 開啟 WSL2 的 GUI 功能：https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps#install-support-for-linux-gui-apps
-2. 允許 docker 連接 X server
     ```sh
-    xhost +local:docker
+    mkdir -p ~/ros2_ws/src
+    cd ~/ros2_ws/src
+    git clone git@github.com:NCTU-AUV/orca_docker.git
     ```
-3. 執行 container
+
+2. Setup an env variable to your workspace
+
     ```sh
-    docker run -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY -it --rm osrf/ros:humble-desktop
+    export ROS2_WS=$HOME/ros2_ws
     ```
-4. 在 container 內執行以下指令，可以跑出 TurtleSim 的視窗代表成功
+
+3. The up script build the image and start the container for you, or attach to the container if there is one running.
     ```sh
-    ros2 run turtlesim turtlesim_node
+    cd ~/ros2_ws/src/orca_docker
+    ./scripts/up
     ```
-    ![](https://hackmd.io/_uploads/Skfh-IFbT.png)
-
-### Virtual Machine
-
-同上面的 step 2~4
-
-### MacOS
-
-(待測試)
-
-## Utils
-
-這邊是方便大家執行 ros2 container 的指令
-
-### Setup
-
-1. clone repository
-   ```sh
-   git clone git@github.com:NCTU-AUV/orca_docker.git
-   ```
-2. 建立一個 ROS workspace
-    ```sh
-    mkdir -p /path/to/your/workspace/src
-    ```
-    e.g.
-    ```sh
-    mkdir -p ~/demo_ws/src
-    ```
-3. 將下面兩行加入 `~/.bashrc`
-    ```sh
-    export PATH=$PATH:/path/to/this/repo/scripts
-    export DEMO_WS=/path/to/your/workspace
-    ```
-    e.g.
-    ```sh
-    export PATH=$PATH:$HOME/orca_docker/scripts
-    export DEMO_WS=$HOME/demo_ws
-    ```
-4. 重新 source `~/.bashrc`
-    ```sh
-    source ~/.bashrc
-    ```
-5. Build docker image
-   ```
-   cd /path/to/this/repo
-   docker build -f Dockerfile -t orca_ros2 .
-   ```
-
-### Usage
-
-- 在 container 裡執行任何 command (若 container 不存在則會幫你 run 一個新的)
-    ```sh
-    up <command>
-    ```
-    e.g.
-    ```sh
-    # 執行 bash
-    up bash
-    # 執行 turtlesim
-    up ros2 run turtlesim turtlesim_node
-    ```
+    note: you can add an alias to this command or add scripts to PATH for convenience
