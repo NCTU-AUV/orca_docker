@@ -31,10 +31,15 @@
    xhost +local:docker
    ```
 
-4. The up script build the image and start the container for you, or attach to the container if there is one running.
+4. Build the image
 
     ```sh
-    cd ~/workspaces/ros2_ws/src/orca_docker
+    ./scripts/build.sh
+    ```
+
+5. The up script build the image and start the container for you, or attach to the container if there is one running.
+
+    ```sh
     ./scripts/up
     ```
     note: you can add an alias to this command or add scripts to PATH for convenience
