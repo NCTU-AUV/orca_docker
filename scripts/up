@@ -25,23 +25,16 @@ if [ "$(docker container inspect -f '{{.State.Status}}' $CONTAINER_NAME)" = "run
     if [ -z "$1" ]; then
         echo -e "${YELLOW}WARNING: no arguments provided${NC}"
     fi
-
     # run docker exec
-    docker exec -it $CONTAINER_NAME /ros_entrypoint.sh "$@"
+    docker exec -it $CONTAINER_NAME /ros_entrypoint.sh /bin/bash
 # no orca_ros2 container is running
 else
-    # rebuild the image
-    if ! docker build -f Dockerfile -t "${IMAGE_NAME}" "${ROS2_WS}"; then
-        echo -e "${RED}FAILED: failed to build ${IMAGE_NAME}${NC}"
-    # start the container
-    else
-        docker run \
-            -v "${ROS2_WS}:${WORKDIR}" \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -e DISPLAY \
-            --name $CONTAINER_NAME \
-            -it \
-            --rm \
-            "${IMAGE_NAME}:latest" /bin/bash
-    fi
+    docker run \
+        -v "${ROS2_WS}:${WORKDIR}" \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY \
+        --name $CONTAINER_NAME \
+        -it \
+        --rm \
+        "${IMAGE_NAME}:latest" /bin/bash
 fi

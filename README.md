@@ -1,5 +1,8 @@
 # Orca AUV ROS2 environment
 
+> [!NOTE]
+> (2023/11/14) Please make sure you set the environment variables correctly (there are some updates in the latest commits)
+
 ## Prerequisites
 
 - ubuntu 22.04 (recommended)
@@ -21,7 +24,14 @@
     export ROS2_WS=$HOME/workspaces/ros2_ws
     ```
 
-3. The up script build the image and start the container for you, or attach to the container if there is one running.
+3. Enable GUI application in docker (optional)
+
+   ```
+   xhost +local:docker
+   ```
+
+4. The up script build the image and start the container for you, or attach to the container if there is one running.
+
     ```sh
     cd ~/workspaces/ros2_ws/src/orca_docker
     ./scripts/up
