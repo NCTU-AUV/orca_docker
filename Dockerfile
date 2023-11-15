@@ -27,9 +27,10 @@ RUN apt-get install -y vim
 
 # install ros packages dependencies
 RUN rosdep update \
-    && rosdep install -i --from-path src --rosdistro humble -y
+    && rosdep install --from-path src --ignore-src -r -y
 
 RUN echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /home/$USERNAME/.bashrc
 RUN echo "source ${ROS_WS}/install/setup.bash" >> /home/$USERNAME/.bashrc
+RUN echo "source /usr/share/gazebo/setup.bash" >> /home/$USERNAME/.bashrc
 
 USER $USERNAME

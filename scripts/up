@@ -36,5 +36,5 @@ else
         --name $CONTAINER_NAME \
         -it \
         --rm \
-        "${IMAGE_NAME}:latest" /bin/bash
+        "${IMAGE_NAME}:latest" /ros_entrypoint.sh /bin/bash
 fi
