@@ -32,5 +32,6 @@ RUN rosdep update \
 RUN echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /home/$USERNAME/.bashrc
 RUN echo "source ${ROS_WS}/install/setup.bash" >> /home/$USERNAME/.bashrc
 RUN echo "source /usr/share/gazebo/setup.bash" >> /home/$USERNAME/.bashrc
+RUN echo "alias build='colcon build --symlink-install'" >> /home/$USERNAME/.bashrc
 
 USER $USERNAME
