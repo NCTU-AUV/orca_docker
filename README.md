@@ -3,6 +3,7 @@
 > [!NOTE]
 > - (2023/11/14) Please make sure you set the environment variables correctly (there are some updates in the latest commits)
 > - (2023/11/14) Note that there are two branches, `master` and `tutorial` in this repo.
+> - (2023/12/01) The current Dockerfile is only suitable for x86 system
 
 ## Prerequisites
 
