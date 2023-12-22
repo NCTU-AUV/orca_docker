@@ -34,6 +34,8 @@ else
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -e DISPLAY \
         --name $CONTAINER_NAME \
+				--net=host \
+				--pid=host \
         -it \
         --rm \
         "${IMAGE_NAME}:latest" /ros_entrypoint.sh /bin/bash
