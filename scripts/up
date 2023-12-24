@@ -29,12 +29,14 @@ if [ "$(docker container inspect -f '{{.State.Status}}' $CONTAINER_NAME)" = "run
     docker exec -it $CONTAINER_NAME /ros_entrypoint.sh /bin/bash
 # no orca_ros2 container is running
 else
-    docker run \
+    docker run -it --rm \
+        --privileged \
         -v "${ROS2_WS}:${WORKDIR}" \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -v "$HOME/.Xauthority:/home/admin/.Xauthority:ro" \
         -e DISPLAY \
+        --net=host \
+        --pid=host \
         --name $CONTAINER_NAME \
-        -it \
-        --rm \
         "${IMAGE_NAME}:latest" /ros_entrypoint.sh /bin/bash
 fi
